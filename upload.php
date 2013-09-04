@@ -1,6 +1,8 @@
 <?php
 $uploadDir = "uploads/";
-$path = "http://".$_SERVER["SERVER_NAME"]."/imagesearch/";
+$node = explode("/", $_SERVER['PHP_SELF']);
+array_pop($node);
+$path = "http://".$_SERVER["SERVER_NAME"]."/".array_pop($node)."/";
 $output = array('statu'=>1, 'text'=>'nothing to happened.');
 if(isset($_FILES['file']['tmp_name'])){
     $uploadedFiles = $_FILES["file"];
@@ -31,8 +33,8 @@ else{
             $pattern = "/^(data:image\/(jpeg|png|gif);base64).*/i";
             preg_match($pattern, $_POST['file'], $matches);
             if(0<count($matches)){
-                $data = base64_decode(str_replace($matches[0], '', $_POST['file']));
-                $fileName = md5($data).$matches[1];
+                $data = base64_decode(str_replace($matches[1], '', $_POST['file']));
+                $fileName = md5($data).".".($matches[2]=='jpeg'?'jpg':$matches[2]);
                 file_put_contents($uploadDir.$fileName, $data);
                 $output = array('statu'=>0, 'text'=>'Ready.', 'url'=>$path.$uploadDir.$fileName );
             }

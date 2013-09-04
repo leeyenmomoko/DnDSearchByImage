@@ -1,9 +1,11 @@
-<?php
-require('../../lib/YenZ/fileSystem/findFile.php');
-$root = "uploads";
-$path = "http://".$_SERVER["SERVER_NAME"]."/imagesearch/";
+<?php
+require('lib/findFile.php');
+$root = "uploads";
+$node = explode("/", $_SERVER['PHP_SELF']);
+array_pop($node);
+$path = "http://".$_SERVER["SERVER_NAME"]."/".array_pop($node)."/";
 
-$files = findFile($root, "/\.jpg|\.png|.gif/", 'REGEX');
+$files = findFile($root, "/\.jpg|\.png|.gif/", 'REGEX');
 
 if(isset($files) && 0<count($files)){
     foreach($files as $filePath){
@@ -11,5 +13,5 @@ if(isset($files) && 0<count($files)){
         echo $filePath."<br />";
     }
 }
-
+
 ?>
